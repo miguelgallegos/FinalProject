@@ -1,0 +1,17 @@
+
+
+
+Init Bank vault amount
+num bankers
+ max amount per transaction
+num cust
+financial goal per customer
+
+
+BankSimulatorForm - settings reader
+
+BankSimulator
+
+UIHelper
+
+Teller

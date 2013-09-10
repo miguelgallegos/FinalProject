@@ -17,8 +17,8 @@ namespace FinalProject
         CustomerList()
         {
 
-            availQueue = new BlockingCollection<Customer>;
-            unAvailQueue = new BlockingCollection<Customer>;
+            availQueue = new BlockingCollection<Customer>();
+            unAvailQueue = new BlockingCollection<Customer>();
 
         }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
 namespace FinalProject
 {
     class TransactionGenerator
@@ -18,8 +19,13 @@ namespace FinalProject
         Random rand;
         enum TransactionType { Deposit=0, Withdrawal=1 };
         BankQueue bankQueue;
+        List<Teller> tellers;
+        BlockingCollection<Teller> availTellerQueue;
+        BlockingCollection<Teller> unAvailTellerQueue;
 
-       public  TransactionGenerator(UIHelper uiHelper, CancellationToken cancelToken, BankQueue bankQueue, CustomerList customerList, int maxTransAmount, int timeOutThrottle)
+        //TODO Add delegate for teller to call to add them to the available queue again when done
+
+       public  TransactionGenerator(UIHelper uiHelper, CancellationToken cancelToken, BankQueue bankQueue, CustomerList customerList, int maxTransAmount, int timeOutThrottle, List<Teller> tellers)
         {
             this.cancelToken = cancelToken;
             this.customerList = customerList;
@@ -29,6 +35,13 @@ namespace FinalProject
             this.bankQueue = bankQueue;
             currentTranAmount = 0;
             rand = new Random();
+            this.tellers = tellers;
+
+           foreach(Teller tel in tellers)
+           {
+               availTellerQueue.Add(tel);
+           }
+
         }
 
 
@@ -60,6 +73,7 @@ namespace FinalProject
         {
 
             Transaction tran = new Transaction(customerList.GetRandomCustomer(cancelToken), (decimal)rand.Next(1, 20), (int)RandomTransactionType());
+            GetAvailableTeller(cancelToken).ProcessTransaction(tran);
 
         }
 
@@ -72,6 +86,23 @@ namespace FinalProject
 
             return randomTransaction;
         }
+
+        private Teller GetAvailableTeller(CancellationToken cToken)
+        {
+               Teller tel;
+            
+            availTellerQueue.TryTake(out tel,100, cToken);
+
+            if (tel != null)
+            {
+                unAvailTellerQueue.Add(tel);
+            }
+            return tel;
+
+        }
+
+
+        
 
     }
 }

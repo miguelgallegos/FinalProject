@@ -58,7 +58,7 @@ namespace FinalProject
 
         private void Simulate()
         {
-            transactionGenerator= new TransactionGenerator(uiHelper,  cancelTokenSource.Token,  bankQueue,  custList,  maxTransactionAmount,  timeOutThrottle);
+          
 
             uiHelper.AddListBoxItems("Adding messages", new[] {"Text test1", "Text test2" });
 
@@ -71,13 +71,13 @@ namespace FinalProject
 
             for (int i = 0; i < numberCustomers; i++)
             {
-                    Random rand = new Random();
+                 Random rand = new Random();
                 uiHelper.AddListBoxItem(string.Format(" +BankSimulator.Simulate adding customer {0}", i));
                custList.SetCustomer(new Customer( "customer "+i.ToString() , (decimal)rand.Next(1, 20)));
 
             }
 
-
+            transactionGenerator = new TransactionGenerator(uiHelper, cancelTokenSource.Token, bankQueue, custList, maxTransactionAmount, timeOutThrottle, tellers);
         }
         
 

@@ -43,5 +43,11 @@ namespace FinalProject
 
             availQueue.Add(cust);
         }
+
+        public void MakeCustomerAvailable(Customer cust, CancellationToken cToken)
+        {
+            unAvailQueue.TryTake(out cust, 100, cToken);
+            availQueue.Add(cust);
+        }
     }
 }

@@ -9,9 +9,26 @@ namespace FinalProject
     class Customer
     {
         List<Transaction> customerHistory;
-        private string name { private set; public get; }
-        private decimal balance { private set; public get; }
+        private string name;
+        private decimal balance ;
 
+        public string Name
+        {
+            get
+            {
+                return name;
+
+            }
+        }
+
+        public decimal Balance
+        {
+            get
+            {
+                return balance;
+
+            }
+        }
 
         public Customer(string name, decimal balance)
         {

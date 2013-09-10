@@ -31,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>FinalProject.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -58,7 +61,6 @@
     <Compile Include="CustomerList.cs" />
     <Compile Include="Transaction.cs" />
     <Compile Include="TransactionGenerator.cs" />
-    <Compile Include="TransactionType.cs" />
     <Compile Include="UIHelper.cs" />
     <Compile Include="BankSimulator.cs" />
     <Compile Include="Program.cs" />

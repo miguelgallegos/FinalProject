@@ -9,16 +9,17 @@ namespace FinalProject
     class Transaction
     {
 
-        private Customer customer { private set; public get; }
-        private decimal amount { private set; get; }
-        private TransactionType type { private set; get; }
+        private Customer customer;
+        private decimal amount;
+        private int TransactionType;  
 
 
-        public Transaction(Customer customer, decimal amount, TransactionType type)
+
+        public Transaction(Customer customer, decimal amount, int TransactionType)
         {
             this.customer = customer;
             this.amount = amount;
-            this.type=type;
+            this.TransactionType=TransactionType;
         }
          
 

@@ -16,7 +16,7 @@ namespace FinalProject
         UIHelper uiHelper;
         int currentTranAmount;
         Random rand;
-        TransactionType type;
+        enum TransactionType { Deposit=0, Withdrawal=1 };
         BankQueue bankQueue;
 
         TransactionGenerator(UIHelper uiHelper, CancellationToken cancelToken, BankQueue bankQueue, CustomerList customerList, int maxTransAmount, int timeOutThrottle)
@@ -44,15 +44,7 @@ namespace FinalProject
         public void CreateTransaction()
 
         {
-            if(type.type=="Withdrawal")
-            {
-                type.type="Deposit";
-            }
-            else
-            {
-                    type.type="Withdrawal";
-
-            }
+             
 
             if(currentTranAmount<maxTransAmount)
             {
@@ -67,10 +59,19 @@ namespace FinalProject
         private void ThreadProc()
         {
 
-            Transaction tran = new Transaction(customerList.GetRandomCustomer(cancelToken), (decimal)rand.Next(1, 20), type);
+            Transaction tran = new Transaction(customerList.GetRandomCustomer(cancelToken), (decimal)rand.Next(1, 20), (int)RandomTransactionType());
 
         }
 
-       
+
+        private TransactionType RandomTransactionType()
+        {
+            Array values = Enum.GetValues(typeof(TransactionType));
+            Random random = new Random();
+            TransactionType randomTransaction = (TransactionType)values.GetValue(random.Next(values.Length));
+
+            return randomTransaction;
+        }
+
     }
 }

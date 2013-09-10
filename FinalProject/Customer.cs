@@ -16,6 +16,7 @@ namespace FinalProject
         {
             get
             {
+               
                 return name;
 
             }

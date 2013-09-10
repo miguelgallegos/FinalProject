@@ -45,12 +45,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bank.cs" />
+    <Compile Include="BankQueue.cs" />
     <Compile Include="BankSimulatorForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="BankSimulatorForm.Designer.cs">
       <DependentUpon>BankSimulatorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="BankVault.cs" />
+    <Compile Include="Customer.cs" />
+    <Compile Include="CustomerList.cs" />
+    <Compile Include="Transaction.cs" />
+    <Compile Include="TransactionGenerator.cs" />
+    <Compile Include="TransactionType.cs" />
     <Compile Include="UIHelper.cs" />
     <Compile Include="BankSimulator.cs" />
     <Compile Include="Program.cs" />

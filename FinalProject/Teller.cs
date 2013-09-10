@@ -10,15 +10,21 @@ namespace FinalProject
 {
     class Teller
     {
-
+        //shared data
         object bank;
         CancellationToken cancelToken;
         UIHelper uiHelper;
+
+        private Task tellerTask;
 
         public Teller(UIHelper uiHelper, CancellationToken cancelToken, object bank) {
             this.cancelToken = cancelToken;
             this.uiHelper = uiHelper;
             this.bank = bank;
+
+            tellerTask = new Task(DoWork);
+            tellerTask.Start();
+
         }
 
         //TaskStatus
@@ -30,8 +36,35 @@ namespace FinalProject
             
         }
 
-        private void ThreadProc()
+        private void DoWork()
         {
+            //TODO: make update async
+            uiHelper.AddTellerStartedMessage(string.Format("  -Teller Started {0}", tellerTask.Id));
+
+
+                try
+                {
+                    while (true)
+                    {
+
+                        cancelToken.ThrowIfCancellationRequested();
+
+                        Thread.Sleep(100);
+
+                    }
+                }
+                catch (OperationCanceledException oce)
+                {
+
+                }
+                finally
+                {
+                    uiHelper.AddTellerStoppedMessage(string.Format("    --Teller Stopped {0}!", tellerTask.Id));
+                }
+
+
+            
+
 
         }
 

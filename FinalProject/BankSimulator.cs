@@ -21,7 +21,10 @@ namespace FinalProject
         private int maxTransactionAmount;
         private UIHelper uiHelper;
 
-        
+        private Task simulatorTask;
+        private List<Teller> tellers;
+        private object bank;
+
 
         public BankSimulator(UIHelper uiHelper, int bankVaultAmount, int numberCustomers, int numberTellers, int initCustomersAmount, int customersGoal, int maxTransactionAmount)
         {
@@ -33,8 +36,14 @@ namespace FinalProject
             this.maxTransactionAmount = maxTransactionAmount;
             this.uiHelper = uiHelper;
 
-            
 
+            //starts
+            simulatorTask = new Task(Simulate);
+            simulatorTask.Start();
+
+            tellers = new List<Teller>();
+            bank = new object();
+            cancelTokenSource = new CancellationTokenSource();
         }
 
         public void Stop()
@@ -44,6 +53,15 @@ namespace FinalProject
 
         private void Simulate()
         {
+            uiHelper.AddListBoxItems("Adding messages", new[] {"Text test1", "Text test2" });
+
+            for (int i = 0; i < numberTellers; i++)
+            {
+                uiHelper.AddListBoxItem(string.Format(" +BankSimulator.Simulate adding teller {0}", i));
+                tellers.Add(new Teller(uiHelper, cancelTokenSource.Token, bank));
+
+            }
+
 
         }
         

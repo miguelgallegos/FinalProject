@@ -28,19 +28,28 @@ namespace FinalProject
         {
 
         }
-        public void AddListBoxItems(string message, string[] strs ){
-        
+
+        public void AddListBoxItem(string message) {
+            form.AddListBoxItem(message);
         }
-        public void AddTellerStartedMessage(){}
-        public void AddTellerStoppedMessage(){}
+
+        public void AddListBoxItems(string message, string[] messages ){
+            form.AddListBoxItems(message, messages);
+        }
+        public void AddTellerStartedMessage(string message){
+            form.AddListBoxItem(message);
+        }
+        public void AddTellerStoppedMessage(string message){
+            form.AddListBoxItem(message);
+        }
         public void AddThreadIdMessage(string str, string str1){}
         public void  AddTransactionGeneratorStartedMessage(){}
         public void  AddTransactionGeneratorStoppedMessage(){}
-        public void  StartButton(bool on){}
-        public void  StopButton(bool on){}
-
-        public void AddString(string message)
-        {
+        public void  StartButton(bool state){
+            form.StartButtonState(state);
+        }
+        public void  StopButton(bool state){
+            form.StopButtonState(state);
         }
 
     }

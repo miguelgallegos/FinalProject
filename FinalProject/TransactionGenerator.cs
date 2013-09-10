@@ -19,7 +19,7 @@ namespace FinalProject
         enum TransactionType { Deposit=0, Withdrawal=1 };
         BankQueue bankQueue;
 
-        TransactionGenerator(UIHelper uiHelper, CancellationToken cancelToken, BankQueue bankQueue, CustomerList customerList, int maxTransAmount, int timeOutThrottle)
+       public  TransactionGenerator(UIHelper uiHelper, CancellationToken cancelToken, BankQueue bankQueue, CustomerList customerList, int maxTransAmount, int timeOutThrottle)
         {
             this.cancelToken = cancelToken;
             this.customerList = customerList;
@@ -37,23 +37,23 @@ namespace FinalProject
         {
 
             return task.Status;
-
+           
         }
 
 
         public void CreateTransaction()
 
         {
-             
-
-            if(currentTranAmount<maxTransAmount)
+            while (!cancelToken.IsCancellationRequested)
             {
-                currentTranAmount++;
-                task = new Task(ThreadProc);
-                task.Start();
-                Thread.Sleep(100);
+                if (currentTranAmount < maxTransAmount)
+                {
+                    currentTranAmount++;
+                    task = new Task(ThreadProc);
+                    task.Start();
+                    Thread.Sleep(100);
+                }
             }
-             
         }
 
         private void ThreadProc()

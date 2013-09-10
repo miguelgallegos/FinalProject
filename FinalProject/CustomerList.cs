@@ -14,7 +14,7 @@ namespace FinalProject
         BlockingCollection<Customer> unAvailQueue;
 
 
-        CustomerList()
+        public CustomerList()
         {
 
             availQueue = new BlockingCollection<Customer>();
@@ -48,6 +48,7 @@ namespace FinalProject
         {
             unAvailQueue.TryTake(out cust, 100, cToken);
             availQueue.Add(cust);
+            
         }
     }
 }

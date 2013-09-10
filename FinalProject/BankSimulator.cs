@@ -11,7 +11,7 @@ namespace FinalProject
     {
 
         private CancellationTokenSource cancelTokenSource;
-        private object transactionGenerator;
+        private TransactionGenerator transactionGenerator;
 
         private int bankVaultAmount;
         private int numberCustomers;
@@ -24,7 +24,10 @@ namespace FinalProject
         private Task simulatorTask;
         private List<Teller> tellers;
         private object bank;
-
+        private BankQueue bankQueue;
+        private CustomerList custList;
+        //TODO need to have this added to the config?
+        private int timeOutThrottle = 100;
 
         public BankSimulator(UIHelper uiHelper, int bankVaultAmount, int numberCustomers, int numberTellers, int initCustomersAmount, int customersGoal, int maxTransactionAmount)
         {
@@ -36,13 +39,15 @@ namespace FinalProject
             this.maxTransactionAmount = maxTransactionAmount;
             this.uiHelper = uiHelper;
 
-
+            this.custList = new CustomerList();
             //starts
             simulatorTask = new Task(Simulate);
             simulatorTask.Start();
 
             tellers = new List<Teller>();
             bank = new object();
+            bankQueue = new BankQueue();
+
             cancelTokenSource = new CancellationTokenSource();
         }
 
@@ -53,12 +58,22 @@ namespace FinalProject
 
         private void Simulate()
         {
+            transactionGenerator= new TransactionGenerator(uiHelper,  cancelTokenSource.Token,  bankQueue,  custList,  maxTransactionAmount,  timeOutThrottle);
+
             uiHelper.AddListBoxItems("Adding messages", new[] {"Text test1", "Text test2" });
 
             for (int i = 0; i < numberTellers; i++)
             {
                 uiHelper.AddListBoxItem(string.Format(" +BankSimulator.Simulate adding teller {0}", i));
                 tellers.Add(new Teller(uiHelper, cancelTokenSource.Token, bank));
+
+            }
+
+            for (int i = 0; i < numberCustomers; i++)
+            {
+                    Random rand = new Random();
+                uiHelper.AddListBoxItem(string.Format(" +BankSimulator.Simulate adding customer {0}", i));
+               custList.SetCustomer(new Customer( "customer "+i.ToString() , (decimal)rand.Next(1, 20)));
 
             }
 

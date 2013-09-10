@@ -20,6 +20,8 @@ namespace FinalProject
             this.customer = customer;
             this.amount = amount;
             this.TransactionType=TransactionType;
+
+
         }
          
 

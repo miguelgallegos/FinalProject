@@ -36,7 +36,7 @@ namespace FinalProject
 
 
             tellers = new List<Teller>();
-            bankQueue = new BankQueue();
+            bankQueue = new BankQueue(cancelToken);
 
             InitBank();
 
@@ -53,6 +53,10 @@ namespace FinalProject
 
         public List<Teller> Tellers() {
             return tellers;
+        }
+
+        public BankVault BankVault() {
+            return bankVault;
         }
 
         private void InitBank() {

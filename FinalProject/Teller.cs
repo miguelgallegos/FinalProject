@@ -32,7 +32,12 @@ namespace FinalProject
             return new object();
         }
 
-        public void ProcessTransaction(object transaction) { 
+        public void ProcessTransaction(Transaction transaction, TransactionGenerator tranGen) {
+
+            //TODO
+            //Process the transaction.
+
+            tranGen.ma(this);
             
         }
 

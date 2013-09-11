@@ -12,7 +12,7 @@ namespace FinalProject
         CancellationToken cancelToken;
         CustomerList customerList;
         int maxTransAmount;
-        Task task;
+        Task  task;
         int timeOutThrottle;
         UIHelper uiHelper;
         int currentTranAmount;
@@ -22,6 +22,8 @@ namespace FinalProject
         List<Teller> tellers;
         BlockingCollection<Teller> availTellerQueue;
         BlockingCollection<Teller> unAvailTellerQueue;
+        public delegate void MakeAvailable(Teller tel);
+        public MakeAvailable ma;
 
         //TODO Add delegate for teller to call to add them to the available queue again when done
 
@@ -36,6 +38,10 @@ namespace FinalProject
             currentTranAmount = 0;
             rand = new Random();
             this.tellers = tellers;
+
+            ma = new MakeAvailable(MakeTellerAvailable);
+            availTellerQueue = new BlockingCollection<Teller>();
+            unAvailTellerQueue = new BlockingCollection<Teller>();
 
            foreach(Teller tel in tellers)
            {
@@ -59,23 +65,30 @@ namespace FinalProject
         {
             while (!cancelToken.IsCancellationRequested)
             {
+
+
+
                 if (currentTranAmount < maxTransAmount)
                 {
                     currentTranAmount++;
-                    task = new Task(ThreadProc);
-                    task.Start();
-                    Thread.Sleep(100);
+                    task = Task.Factory.StartNew(() =>
+                    {
+                        Transaction tran = new Transaction(customerList.GetRandomCustomer(cancelToken), (decimal)rand.Next(1, 20), (int)RandomTransactionType());
+                        Teller tel = GetAvailableTeller();
+                        tel.ProcessTransaction(tran, this);
+                        Thread.Sleep(100);    
+                    });
                 }
             }
         }
 
-        private void ThreadProc()
+       /* private  asyn void ThreadProc()
         {
+            
+           
+      
 
-            Transaction tran = new Transaction(customerList.GetRandomCustomer(cancelToken), (decimal)rand.Next(1, 20), (int)RandomTransactionType());
-            GetAvailableTeller(cancelToken).ProcessTransaction(tran);
-
-        }
+        }*/
 
 
         private TransactionType RandomTransactionType()
@@ -87,11 +100,11 @@ namespace FinalProject
             return randomTransaction;
         }
 
-        private Teller GetAvailableTeller(CancellationToken cToken)
+        private Teller GetAvailableTeller()
         {
                Teller tel;
-            
-            availTellerQueue.TryTake(out tel,100, cToken);
+
+               availTellerQueue.TryTake(out tel, timeOutThrottle, cancelToken);
 
             if (tel != null)
             {
@@ -101,7 +114,12 @@ namespace FinalProject
 
         }
 
-
+        public void MakeTellerAvailable(Teller tel)
+            
+        {
+            unAvailTellerQueue.TryTake(out tel, timeOutThrottle, this.cancelToken);
+            availTellerQueue.Add(tel);
+        }
         
 
     }

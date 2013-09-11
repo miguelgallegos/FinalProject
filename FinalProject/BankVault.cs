@@ -46,5 +46,10 @@ namespace FinalProject
 
         }
 
+        public decimal Balance()
+        {
+            return bankBalance;
+        }
+
     }
 }

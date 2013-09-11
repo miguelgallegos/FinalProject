@@ -24,6 +24,9 @@ namespace FinalProject
 
         public decimal Balance
         {
+
+            set { balance = value; }
+
             get
             {
                 return balance;

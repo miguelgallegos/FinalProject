@@ -60,7 +60,7 @@ namespace FinalProject
 
             bank = new Bank(uiHelper, cancelTokenSource.Token, numberTellers, numberCustomers, bankVaultAmount, maxTransactionAmount);
 
-            transactionGenerator = new TransactionGenerator(uiHelper, cancelTokenSource.Token, bank.BankQueue(), bank.Customers(), maxTransactionAmount, timeOutThrottle, bank.Tellers());
+            transactionGenerator = new TransactionGenerator(uiHelper, cancelTokenSource.Token, bank.BankQueue(), bank.Customers(), maxTransactionAmount, timeOutThrottle, bank.Tellers(), bank);
         }
         
 

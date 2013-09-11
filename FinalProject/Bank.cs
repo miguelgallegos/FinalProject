@@ -61,6 +61,8 @@ namespace FinalProject
 
         private void InitBank() {
 
+            bankVault = new BankVault(bankVaultAmount);
+
             for (int i = 0; i < numberTellers; i++)
             {
                 uiHelper.AddListBoxItem(string.Format(" +Bank.InitBank adding teller {0}", i));

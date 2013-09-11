@@ -19,14 +19,15 @@ namespace FinalProject
             this.form = form;
         }
 
-        public void AddBankOutOfFundsCustomerTransaction(/*Transaction*/ object transaction, decimal funds)
+        public void AddBankOutOfFundsCustomerTransaction(Transaction transaction, decimal funds)
         {
 
         }
 
-        public void AddCustomerTransaction(/*Transaction*/ object transaction, decimal val, bool val1)
+        public void AddCustomerTransaction(Transaction transaction, Teller teller)//, decimal val, bool val1
         {
-
+            form.AddListBoxItem(string.Format("  #{0} of {1} from {2}, assisted by {3}, balance ${4}", transaction.Type() == TransactionGenerator.TransactionType.Deposit?"Deposit":"Withdrawal",
+                transaction.Amount(), transaction.Customer().Name, teller, transaction.Customer().Balance));
         }
 
         public void AddListBoxItem(string message) {

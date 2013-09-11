@@ -11,13 +11,13 @@ namespace FinalProject
     class Teller
     {
         //shared data
-        object bank;
+        Bank bank;
         CancellationToken cancelToken;
         UIHelper uiHelper;
 
         private Task tellerTask;
 
-        public Teller(UIHelper uiHelper, CancellationToken cancelToken, object bank) {
+        public Teller(UIHelper uiHelper, CancellationToken cancelToken, Bank bank) {
             this.cancelToken = cancelToken;
             this.uiHelper = uiHelper;
             this.bank = bank;
@@ -28,8 +28,8 @@ namespace FinalProject
         }
 
         //TaskStatus
-        public object Stop() {
-            return new object();
+        public TaskStatus Stop() {
+            return tellerTask.Status;
         }
 
         public void ProcessTransaction(Transaction transaction, TransactionGenerator tranGen) {

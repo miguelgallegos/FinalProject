@@ -22,10 +22,10 @@ namespace FinalProject
         private UIHelper uiHelper;
 
         private Task simulatorTask;
-        private List<Teller> tellers;
-        private object bank;
-        private BankQueue bankQueue;
-        private CustomerList custList;
+
+        private Bank bank;
+        
+        
         //TODO need to have this added to the config?
         private int timeOutThrottle = 100;
 
@@ -39,16 +39,12 @@ namespace FinalProject
             this.maxTransactionAmount = maxTransactionAmount;
             this.uiHelper = uiHelper;
 
-            this.custList = new CustomerList();
             //starts
             simulatorTask = new Task(Simulate);
             simulatorTask.Start();
 
-            tellers = new List<Teller>();
-            bank = new object();
-            bankQueue = new BankQueue();
-
             cancelTokenSource = new CancellationTokenSource();
+            
         }
 
         public void Stop()
@@ -58,26 +54,13 @@ namespace FinalProject
 
         private void Simulate()
         {
-          
 
-            uiHelper.AddListBoxItems("Adding messages", new[] {"Text test1", "Text test2" });
+            //uiHelper.AddListBoxItems("Adding messages", new[] {"Text test1", "Text test2" });
+            uiHelper.AddListBoxItem("BankSimulator.Simulate Started...");
 
-            for (int i = 0; i < numberTellers; i++)
-            {
-                uiHelper.AddListBoxItem(string.Format(" +BankSimulator.Simulate adding teller {0}", i));
-                tellers.Add(new Teller(uiHelper, cancelTokenSource.Token, bank));
+            bank = new Bank(uiHelper, cancelTokenSource.Token, numberTellers, numberCustomers, bankVaultAmount, maxTransactionAmount);
 
-            }
-
-            for (int i = 0; i < numberCustomers; i++)
-            {
-                 Random rand = new Random();
-                uiHelper.AddListBoxItem(string.Format(" +BankSimulator.Simulate adding customer {0}", i));
-               custList.SetCustomer(new Customer( "customer "+i.ToString() , (decimal)rand.Next(1, 20)));
-
-            }
-
-            transactionGenerator = new TransactionGenerator(uiHelper, cancelTokenSource.Token, bankQueue, custList, maxTransactionAmount, timeOutThrottle, tellers);
+            transactionGenerator = new TransactionGenerator(uiHelper, cancelTokenSource.Token, bank.BankQueue(), bank.Customers(), maxTransactionAmount, timeOutThrottle, bank.Tellers());
         }
         
 

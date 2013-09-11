@@ -48,6 +48,8 @@ namespace FinalProject
                availTellerQueue.Add(tel);
            }
 
+           CreateTransaction();
+
         }
 
 
@@ -60,35 +62,41 @@ namespace FinalProject
         }
 
 
-        public void CreateTransaction()
-
+        private void CreateTransaction()
+           
         {
-            while (!cancelToken.IsCancellationRequested)
+            try
             {
 
-
-
-                if (currentTranAmount < maxTransAmount)
+                while (!cancelToken.IsCancellationRequested)
                 {
-                    currentTranAmount++;
-                    task = Task.Factory.StartNew(() =>
+                    if (currentTranAmount < maxTransAmount)
                     {
-                        Transaction tran = new Transaction(customerList.GetRandomCustomer(cancelToken), (decimal)rand.Next(1, 20), (int)RandomTransactionType());
-                        Teller tel = GetAvailableTeller();
-                        tel.ProcessTransaction(tran, this);
-                        Thread.Sleep(100);    
-                    });
+                        currentTranAmount++;
+                        task = Task.Factory.StartNew(() =>
+                        {
+                            Customer cust = customerList.GetRandomCustomer(cancelToken);
+                            if (cust != null)
+                            {
+                                Transaction tran = new Transaction(cust, (decimal)rand.Next(1, 20), (int)RandomTransactionType());
+                                Teller tel = GetAvailableTeller();
+                                tel.ProcessTransaction(tran, this);
+                                cancelToken.ThrowIfCancellationRequested();
+                            }
+                           
+                            Thread.Sleep(100);
+                        });
+                    }
                 }
             }
+            catch (OperationCanceledException oce)
+            {
+            }
+                finally{
+
+                uiHelper.AddTellerStoppedMessage(string.Format("TransactionGenerator {0} Stopped!", task.Id));
+            }
         }
-
-       /* private  asyn void ThreadProc()
-        {
-            
-           
-      
-
-        }*/
 
 
         private TransactionType RandomTransactionType()

@@ -25,14 +25,20 @@ namespace FinalProject
 
         public Customer GetRandomCustomer(CancellationToken cToken )
         {
-
-            Customer cust;
-            
-            availQueue.TryTake(out cust,100, cToken);
-
-            if (cust != null)
+            Customer cust=null;
+            try
             {
-                unAvailQueue.Add(cust);
+              
+                availQueue.TryTake(out cust, 100, cToken);
+
+                if (cust != null)
+                {
+                    unAvailQueue.Add(cust);
+                }
+                
+            }
+            catch (OperationCanceledException oce)
+            {
             }
             return cust;
         }

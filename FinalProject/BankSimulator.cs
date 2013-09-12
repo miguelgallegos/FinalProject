@@ -24,7 +24,8 @@ namespace FinalProject
         private Task simulatorTask;
 
         private Bank bank;
-        
+        public delegate void StopBankSimulation();
+        public StopBankSimulation StopSimulation;
         
         //TODO need to have this added to the config?
         private int timeOutThrottle = 100;
@@ -38,29 +39,39 @@ namespace FinalProject
             this.customersGoal = customersGoal;
             this.maxTransactionAmount = maxTransactionAmount;
             this.uiHelper = uiHelper;
-
+            this.StopSimulation = Stop;
             //starts
+            cancelTokenSource = new CancellationTokenSource();
+
             simulatorTask = new Task(Simulate);
+           
             simulatorTask.Start();
 
-            cancelTokenSource = new CancellationTokenSource();
-            
+           
         }
 
         public void Stop()
         {
-            cancelTokenSource.Cancel();
+            if (!cancelTokenSource.IsCancellationRequested)
+            {
+                cancelTokenSource.Cancel();
+                uiHelper.AddListBoxItem("BankSimulator.Simulate Ended...");
+            }
         }
 
         private void Simulate()
         {
 
+
+
+            bank = new Bank(uiHelper, cancelTokenSource.Token, numberTellers, numberCustomers, bankVaultAmount, maxTransactionAmount, customersGoal);
             //uiHelper.AddListBoxItems("Adding messages", new[] {"Text test1", "Text test2" });
             uiHelper.AddListBoxItem("BankSimulator.Simulate Started...");
-
-            bank = new Bank(uiHelper, cancelTokenSource.Token, numberTellers, numberCustomers, bankVaultAmount, maxTransactionAmount);
-
-            transactionGenerator = new TransactionGenerator(uiHelper, cancelTokenSource.Token, bank.BankQueue(), bank.Customers(), maxTransactionAmount, timeOutThrottle, bank.Tellers(), bank);
+           
+                transactionGenerator = new TransactionGenerator(uiHelper, cancelTokenSource.Token, bank.BankQueue(), bank.Customers(), maxTransactionAmount, timeOutThrottle, bank.Tellers(), bank);
+            
+        
+         
         }
         
 

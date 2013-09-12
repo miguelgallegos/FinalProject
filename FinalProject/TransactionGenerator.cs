@@ -22,12 +22,9 @@ namespace FinalProject
         List<Teller> tellers;
         BlockingCollection<Teller> availTellerQueue;
         BlockingCollection<Teller> unAvailTellerQueue;
-        public delegate void MakeAvailable(Teller tel);
-        public MakeAvailable ma;
 
         private Bank bank;
 
-        //TODO Add delegate for teller to call to add them to the available queue again when done
 
        public  TransactionGenerator(UIHelper uiHelper, CancellationToken cancelToken, BankQueue bankQueue, CustomerList customerList, int maxTransAmount, int timeOutThrottle, List<Teller> tellers, Bank bank)
         {
@@ -42,8 +39,6 @@ namespace FinalProject
             currentTranAmount = 0;
             rand = new Random();
             this.tellers = tellers;
-
-            ma = new MakeAvailable(MakeTellerAvailable);
             availTellerQueue = new BlockingCollection<Teller>();
             unAvailTellerQueue = new BlockingCollection<Teller>();
 
@@ -52,7 +47,6 @@ namespace FinalProject
                availTellerQueue.Add(tel);
            }
 
-           //CreateTransaction();
 
            task = new Task(Generate);
            task.Start();
@@ -68,7 +62,7 @@ namespace FinalProject
         }
 
 
-        //private void CreateTransaction()
+    
         private void Generate()
         {
             try
@@ -76,33 +70,28 @@ namespace FinalProject
 
                 while (!cancelToken.IsCancellationRequested)
                 {
-                    //
-                    //if (currentTranAmount < maxTransAmount)
+
                     {
                         currentTranAmount++;
-                        //task = Task.Factory.StartNew(() =>
-                        //{
-                            Customer cust = customerList.GetRandomCustomer(cancelToken);
-                            if (cust != null)
-                            {
-                                Transaction tran = new Transaction(cust, (decimal)rand.Next(1, maxTransAmount), RandomTransactionType());
-                                tran.TransactionGenerator = this;
-                                //Teller tel = GetAvailableTeller();
-                                //tel.ProcessTransaction(tran, this);
-                                
-                                bank.BankQueue().Enqueue(tran);
 
-                                cancelToken.ThrowIfCancellationRequested();
-                            }
-                           
-                            Thread.Sleep(100);
-                        //});
+                        Customer cust = customerList.GetRandomCustomer(cancelToken);
+                        if (cust != null)
+                        {
+                            Transaction tran = new Transaction(cust, (decimal)rand.Next(1, maxTransAmount), RandomTransactionType());
+                            tran.TransactionGenerator = this;
+                            bank.BankQueue().Enqueue(tran);
+                            cancelToken.ThrowIfCancellationRequested();
+                        }
+
+                        Thread.Sleep(100);
                     }
                 }
             }
-            catch (OperationCanceledException oce)
+            catch (OperationCanceledException )
             {
+            
             }
+        
             finally{
 
                 uiHelper.AddTellerStoppedMessage(string.Format("TransactionGenerator {0} Stopped!", task.Id));
@@ -119,27 +108,6 @@ namespace FinalProject
             return randomTransaction;
         }
 
-        private Teller GetAvailableTeller()
-        {
-               Teller tel;
-
-               availTellerQueue.TryTake(out tel, timeOutThrottle, cancelToken);
-
-            if (tel != null)
-            {
-                unAvailTellerQueue.Add(tel);
-            }
-            return tel;
-
-        }
-
-        public void MakeTellerAvailable(Teller tel)
-            
-        {
-            unAvailTellerQueue.TryTake(out tel, timeOutThrottle, this.cancelToken);
-            availTellerQueue.Add(tel);
-        }
-        
-
+      
     }
 }

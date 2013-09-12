@@ -19,7 +19,8 @@ namespace FinalProject
         BankSimulator bankSimulator;
         SynchronizationContext syncContext;
         UIHelper uiHelper;
-
+        public delegate void Enabler();
+        public Enabler Enable;
         //
         private int custInitialAmount;
         private int bankVaultAmount;
@@ -54,8 +55,22 @@ namespace FinalProject
             tboxTransactionMaxAmount.Validated += new EventHandler(this.tboxes_Validated);
 
             uiHelper = new UIHelper(this);
-
+            Enable = new Enabler(Stop);
             
+        }
+
+        public void Stop()
+        {
+            bankSimulator.Stop();
+            if (this.startBtn.InvokeRequired)
+            {
+                this.Invoke(Enable);
+            }
+            else
+            {
+                StartButtonState(true);
+                StopButtonState(false);
+            }
         }
 
 
@@ -114,13 +129,19 @@ namespace FinalProject
 
         private void startBtn_Click(object sender, EventArgs e)
         {
+           StopButtonState(true);
+           StartButtonState(false);
             bankSimulator = new BankSimulator(uiHelper, bankVaultAmount, numberCustomers, numberTellers, custInitialAmount, custGoal, maxTransactionAmount);
 
         }
 
         private void stopBtn_Click(object sender, EventArgs e)
         {
-            bankSimulator.Stop();
+            bankSimulator.StopSimulation();
+            StopButtonState(false);
+            StartButtonState(true);
+   
+           
         }
 
         private void clearBtn_Click(object sender, EventArgs e)

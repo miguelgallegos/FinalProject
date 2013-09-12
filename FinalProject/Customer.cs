@@ -10,7 +10,7 @@ namespace FinalProject
     {
         List<Transaction> customerHistory;
         private string name;
-        private decimal balance ;
+        private decimal balance;
 
         public string Name
         {

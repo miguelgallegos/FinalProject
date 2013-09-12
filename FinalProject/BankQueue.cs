@@ -25,7 +25,18 @@ namespace FinalProject
         }
 
         public Transaction Dequeue() {
-            return queue.Take(cancelToken);
+
+            Transaction tryer=null;
+            try
+            {
+             tryer= queue.Take(cancelToken);
+             return tryer;
+            }
+            catch (OperationCanceledException)
+            {
+
+            }
+            return tryer;
         }
 
     }

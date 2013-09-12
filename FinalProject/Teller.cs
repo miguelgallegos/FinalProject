@@ -14,16 +14,18 @@ namespace FinalProject
         Bank bank;
         CancellationToken cancelToken;
         UIHelper uiHelper;
-
+        BankVault bankVault;
         private Task tellerTask;
+        decimal bankBalance;
 
         public Teller(UIHelper uiHelper, CancellationToken cancelToken, Bank bank) {
             this.cancelToken = cancelToken;
             this.uiHelper = uiHelper;
             this.bank = bank;
-
-            tellerTask = new Task(DoWork);
-            tellerTask.Start();
+                tellerTask = new Task(DoWork);
+                tellerTask.Start();
+           
+                
 
         }
 
@@ -41,88 +43,114 @@ namespace FinalProject
             //TODO
             //Process the transaction.
 
-            tranGen.ma(this);
+       
             
         }
         public void ProcessTransaction(Transaction transaction)
         {
-
-            //TODO
-            //Process the transaction.
-
-            //tranGen.ma(this);
-
             Customer aCustomer = transaction.Customer();
-            decimal newBankVaultAmount = 0;
-            if(transaction.Type() == TransactionGenerator.TransactionType.Deposit){
-                newBankVaultAmount = bank.BankVault().Deposit(transaction.Amount());
-
+            if(transaction.Type() == TransactionGenerator.TransactionType.Deposit ){
+           
                 aCustomer.Balance += transaction.Amount();
 
+               bankBalance= bank.BankVault().Deposit(transaction.Amount());
+                OutPutTran(transaction);
+                if (aCustomer.Balance >= bank.CustomerGoal)
+                {
+                    uiHelper.AddGoalReachedCustomerTransaction(transaction, this);
+                }
 
             }else if(transaction.Type() == TransactionGenerator.TransactionType.Withdrawal){
 
-                if(bank.BankVault().Withdraw(transaction.Amount(), decimal.Parse("0"))){
-                    aCustomer.Balance -= transaction.Amount();
+                decimal diff;
+                bool bankEmpty;
+                //Checks customer balance first
+                if (aCustomer.Balance >= transaction.Amount())
+                {
+                    if (bank.BankVault().Withdraw(transaction.Amount(), out diff, out bankEmpty))
+                    {
+                        //Normal Transaction
+                        if (!bankEmpty)
+                        {
+                            aCustomer.Balance -= transaction.Amount();
+                            OutPutTran(transaction);
+                        }
+                        //Get the remainder of bank funds if withdrawal amount >bank balance
+                        if(bankEmpty &&diff>0)
+                        {
+                            aCustomer.Balance -= (transaction.Amount()-diff);
+                            uiHelper.AddBankOutOfFundsCustomerTransaction(transaction, this);
+                           
+                        }
+                        
+                    }
+                    else
+                    {
+                        OutPutTran(transaction);
+                        uiHelper.AddBankOutOfFundsCustomerTransaction(transaction, this);
 
-                    newBankVaultAmount = bank.BankVault().Balance();
+                    }
+                    //Customer doesnt have the funds
+                }
+                else
+                {
+                    uiHelper.AddCustomerOutOfFundsCustomerTransaction(transaction, this);
 
-                }else{
-                    //cancelToken.
-                    
                 }
 
             }
 
             bank.Customers().MakeCustomerAvailable(aCustomer, cancelToken);
 
-            uiHelper.AddCustomerTransaction(transaction, this);
-            uiHelper.AddListBoxItem(string.Format("         BankBalance: ${0}", newBankVaultAmount));
 
-            //transaction.TransactionGenerator.ma(this);
+          
+
             //decimal customerBalance = transaction.
 
         }
         private void DoWork()
         {
             //TODO: make update async
-            uiHelper.AddTellerStartedMessage(string.Format("  -Teller Started {0}", tellerTask.Id));
+      
 
-            Transaction transactionToProcess;
-
-                try
+            try
+            {
+                while (!cancelToken.IsCancellationRequested)
                 {
-                    while (true)
-                    {
+                    uiHelper.AddTellerStartedMessage(string.Format("  -Teller Started {0}", tellerTask.Id));
 
-                        transactionToProcess = bank.BankQueue().Dequeue();
+                    Transaction transactionToProcess;
+                    transactionToProcess = bank.BankQueue().Dequeue();
 
-                       // uiHelper.AddListBoxItem("    --->TELLER.DoWork. VERIFY_TRANSACTION: " + transactionToProcess);
-
+                    // uiHelper.AddListBoxItem("    --->TELLER.DoWork. VERIFY_TRANSACTION: " + transactionToProcess);
+                    if (transactionToProcess != null)
                         ProcessTransaction(transactionToProcess);
+      
+                    cancelToken.ThrowIfCancellationRequested();
 
-                        cancelToken.ThrowIfCancellationRequested();
-
-                        Thread.Sleep(100);
-
-                    }
-                }
-                catch (OperationCanceledException oce)
-                {
+                    Thread.Sleep(100);
 
                 }
+            }
+            catch (OperationCanceledException oce)
+            {
+
+            }
+           
                 finally
                 {
                     uiHelper.AddTellerStoppedMessage(string.Format("    --Teller Stopped {0}!", tellerTask.Id));
+ 
                 }
-
-
-            
-
-
         }
 
 
+        private void OutPutTran(Transaction transaction)
+        {
+            uiHelper.AddCustomerTransaction(transaction, this);
+            uiHelper.AddListBoxItem(string.Format("         BankBalance: ${0}", bankBalance));
+        }
 
-    }
+        }
+
 }

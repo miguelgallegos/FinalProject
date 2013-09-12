@@ -19,9 +19,18 @@ namespace FinalProject
             this.form = form;
         }
 
-        public void AddBankOutOfFundsCustomerTransaction(Transaction transaction, decimal funds)
+        public void AddBankOutOfFundsCustomerTransaction(Transaction transaction, Teller teller)
         {
+            form.AddListBoxItem(string.Format("  #{0} of ${1} for {2}, assisted by {3} failed because the bank is out of money", transaction.Type() == TransactionGenerator.TransactionType.Deposit ? "Deposit" : "Withdrawal",
+               transaction.Amount(), transaction.Customer().Name, teller));
+           form.Invoke(form.Enable);
+        }
 
+        public void AddCustomerOutOfFundsCustomerTransaction(Transaction transaction,Teller teller)
+        {
+            form.AddListBoxItem(string.Format("  #{0} of ${1} for {2}, assisted by {3} failed because the customer balance of ${4} is lower than the withdrawal amount", transaction.Type() == TransactionGenerator.TransactionType.Deposit ? "Deposit" : "Withdrawal",
+                transaction.Amount(), transaction.Customer().Name, teller, transaction.Customer().Balance));
+           
         }
 
         public void AddCustomerTransaction(Transaction transaction, Teller teller)//, decimal val, bool val1
@@ -51,6 +60,14 @@ namespace FinalProject
         }
         public void  StopButton(bool state){
             form.StopButtonState(state);
+        }
+
+        public void AddGoalReachedCustomerTransaction(Transaction transaction, Teller teller)
+        {
+            form.AddListBoxItem(string.Format("  #{0} of ${1} for {2}, assisted by {3} resulted in Customer Goal Reached", transaction.Type() == TransactionGenerator.TransactionType.Deposit ? "Deposit" : "Withdrawal",
+                          transaction.Amount(), transaction.Customer().Name, teller));
+           form.Invoke(form.Enable);
+
         }
 
     }

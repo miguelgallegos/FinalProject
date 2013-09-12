@@ -22,6 +22,7 @@ namespace FinalProject
         public decimal Deposit(decimal amount)
         {
             lock (vaultLock) {
+  
                 bankBalance += amount;
                 return bankBalance;
             }
@@ -29,17 +30,29 @@ namespace FinalProject
         }
         
         //stops sim if false
-        public bool Withdraw(decimal amount, decimal v)
+        public bool Withdraw(decimal amount, out decimal v, out bool bankEmpty)
         {
             lock (vaultLock) {
 
                 if (amount <= bankBalance)
                 {
                     bankBalance -= amount;
+                    v = amount;
+                    bankEmpty = false;
+                    return true;
+                }
+                if(amount >= bankBalance && bankBalance>0)
+                {
+
+                    v = amount - bankBalance;
+                    bankBalance = 0;
+                    bankEmpty = true;
                     return true;
                 }
                 else
                 {
+                    v = 0;
+                    bankEmpty = true;
                     return false;
                 }
             }

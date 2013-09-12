@@ -21,9 +21,20 @@ namespace FinalProject
         private int numberCustomers;
         private int numberTellers;
         private decimal maxTransactionAmount;
+        private decimal customerGoal;
+
+        public decimal CustomerGoal
+        {
+            get
+            {
+
+                return customerGoal;
+
+            }
+        }
 
 
-        public Bank(UIHelper uiHelper, CancellationToken ct, int numberTellers, int numberCustomers, decimal bankVaultAmount, decimal maxTransactionAmount)
+        public Bank(UIHelper uiHelper, CancellationToken ct, int numberTellers, int numberCustomers, decimal bankVaultAmount, decimal maxTransactionAmount, decimal customersGoal)
         {
             this.uiHelper = uiHelper;
             this.cancelToken = ct;
@@ -33,7 +44,7 @@ namespace FinalProject
             this.numberTellers = numberTellers;
             this.bankVaultAmount = bankVaultAmount;
             this.maxTransactionAmount = maxTransactionAmount;
-
+            this.customerGoal = customersGoal;
 
             tellers = new List<Teller>();
             bankQueue = new BankQueue(cancelToken);

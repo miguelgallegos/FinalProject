@@ -54,6 +54,19 @@ namespace FinalProject
             tboxCustGoalAmount.Validated += new EventHandler(this.tboxes_Validated);
             tboxTransactionMaxAmount.Validated += new EventHandler(this.tboxes_Validated);
 
+            foreach(Control control in this.Controls)
+            {
+                foreach (Control ctl in control.Controls)
+                {
+                    if (ctl is TextBox)
+                    {
+                        TextBox myTB = (TextBox)ctl;
+                        myTB.TextChanged += new EventHandler(this.tbox_TextChanged);
+                    }
+                }
+            }
+
+            
             uiHelper = new UIHelper(this);
             Enable = new Enabler(Stop);
             
@@ -173,6 +186,34 @@ namespace FinalProject
             }
         }
 
+        private void tbox_TextChanged(object sender, EventArgs e){
+
+            TextBox myTB = sender as TextBox;
+
+            if (myTB.Name.ToLower().Contains("tellers"))
+            {
+                numberTellers = int.Parse(myTB.Text);
+            }
+            if (myTB.Name.ToLower().Contains("customers"))
+            {
+                numberCustomers = int.Parse(myTB.Text);
+            }
+            if (myTB.Name.ToLower().Contains("vault"))
+            {
+                bankVaultAmount = int.Parse(myTB.Text);
+            }
+            if (myTB.Name.ToLower().Contains("max"))
+            {
+                maxTransactionAmount = int.Parse(myTB.Text);
+            }
+            if (myTB.Name.ToLower().Contains("goal"))
+            {
+                custGoal = int.Parse(myTB.Text);
+            }
+
+
+        }
+
 
         private bool TextBoxValidationNonEmpty(List<TextBox> tboxes)
         {
@@ -211,5 +252,3 @@ namespace FinalProject
 
     }
 }
-
-///stop threads or put to wait using wait handle? - waitAll waitAny?

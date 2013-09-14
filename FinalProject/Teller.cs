@@ -24,8 +24,8 @@ namespace FinalProject
             this.bank = bank;
                 tellerTask = new Task(DoWork);
                 tellerTask.Start();
-           
-                
+
+                uiHelper.AddTellerStartedMessage(string.Format(" -Teller Started {0}", tellerTask.Id));
 
         }
 
@@ -110,14 +110,12 @@ namespace FinalProject
         }
         private void DoWork()
         {
-            //TODO: make update async
-      
-
+            
             try
             {
                 while (!cancelToken.IsCancellationRequested)
                 {
-                    uiHelper.AddTellerStartedMessage(string.Format("  -Teller Started {0}", tellerTask.Id));
+                    
 
                     Transaction transactionToProcess;
                     transactionToProcess = bank.BankQueue().Dequeue();
@@ -139,7 +137,7 @@ namespace FinalProject
            
                 finally
                 {
-                    uiHelper.AddTellerStoppedMessage(string.Format("    --Teller Stopped {0}!", tellerTask.Id));
+                    uiHelper.AddTellerStoppedMessage(string.Format("  --Teller Stopped {0}", tellerTask.Id));
  
                 }
         }
@@ -147,8 +145,8 @@ namespace FinalProject
 
         private void OutPutTran(Transaction transaction)
         {
-            uiHelper.AddCustomerTransaction(transaction, this);
-            uiHelper.AddListBoxItem(string.Format("         BankBalance: ${0}", bankBalance));
+            uiHelper.AddCustomerTransaction(transaction, this, bank.BankVault().Balance());
+            uiHelper.BankAmountFinalUpdate(bank.BankVault().Balance());
         }
 
         }

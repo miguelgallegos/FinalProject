@@ -48,6 +48,8 @@
             this.stopBtn = new System.Windows.Forms.Button();
             this.clearBtn = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
+            this.bankVaultFinal = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -126,7 +128,7 @@
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Location = new System.Drawing.Point(341, 13);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(449, 108);
+            this.groupBox2.Size = new System.Drawing.Size(452, 108);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Transactions";
@@ -157,7 +159,7 @@
             this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Location = new System.Drawing.Point(13, 127);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(777, 50);
+            this.groupBox3.Size = new System.Drawing.Size(780, 50);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Customer";
@@ -204,13 +206,13 @@
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Location = new System.Drawing.Point(13, 204);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(777, 173);
+            this.listBox1.Size = new System.Drawing.Size(780, 199);
             this.listBox1.TabIndex = 3;
             // 
             // startBtn
             // 
             this.startBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.startBtn.Location = new System.Drawing.Point(13, 383);
+            this.startBtn.Location = new System.Drawing.Point(13, 446);
             this.startBtn.Name = "startBtn";
             this.startBtn.Size = new System.Drawing.Size(75, 23);
             this.startBtn.TabIndex = 4;
@@ -222,7 +224,7 @@
             // 
             this.stopBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.stopBtn.Enabled = false;
-            this.stopBtn.Location = new System.Drawing.Point(94, 383);
+            this.stopBtn.Location = new System.Drawing.Point(94, 446);
             this.stopBtn.Name = "stopBtn";
             this.stopBtn.Size = new System.Drawing.Size(75, 23);
             this.stopBtn.TabIndex = 5;
@@ -233,7 +235,7 @@
             // clearBtn
             // 
             this.clearBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.clearBtn.Location = new System.Drawing.Point(715, 383);
+            this.clearBtn.Location = new System.Drawing.Point(718, 446);
             this.clearBtn.Name = "clearBtn";
             this.clearBtn.Size = new System.Drawing.Size(75, 23);
             this.clearBtn.TabIndex = 6;
@@ -250,9 +252,30 @@
             this.label7.TabIndex = 10;
             this.label7.Text = "Transaction History";
             // 
+            // bankVaultFinal
+            // 
+            this.bankVaultFinal.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bankVaultFinal.ForeColor = System.Drawing.Color.Green;
+            this.bankVaultFinal.Location = new System.Drawing.Point(694, 410);
+            this.bankVaultFinal.Name = "bankVaultFinal";
+            this.bankVaultFinal.Size = new System.Drawing.Size(98, 20);
+            this.bankVaultFinal.TabIndex = 11;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(622, 413);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(66, 13);
+            this.label8.TabIndex = 12;
+            this.label8.Text = "Bank\'s Vault";
+            this.label8.Click += new System.EventHandler(this.label8_Click);
+            // 
             // BankSimulatorForm
             // 
-            this.ClientSize = new System.Drawing.Size(802, 443);
+            this.ClientSize = new System.Drawing.Size(805, 481);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.bankVaultFinal);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.clearBtn);
             this.Controls.Add(this.stopBtn);
@@ -295,6 +318,8 @@
         private System.Windows.Forms.TextBox tboxCustInitialAmount;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox bankVaultFinal;
+        private System.Windows.Forms.Label label8;
 
     }
 }

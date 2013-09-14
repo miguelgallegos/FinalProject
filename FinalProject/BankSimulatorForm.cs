@@ -136,6 +136,14 @@ namespace FinalProject
         { 
             stopBtn.Enabled = state;
         }
+
+        public void BankAmountFinalUpdate(decimal amount)
+        {
+
+
+            syncContext.Post(x => { x = bankVaultFinal.Text = string.Format("{0:C}", amount); Application.DoEvents(); }, null);
+        }
+
         protected override void OnClosing(CancelEventArgs e)
         {
         }
@@ -189,6 +197,10 @@ namespace FinalProject
         private void tbox_TextChanged(object sender, EventArgs e){
 
             TextBox myTB = sender as TextBox;
+
+            if (myTB.Text.Length <= 0) {
+                return;
+            }
 
             if (myTB.Name.ToLower().Contains("tellers"))
             {
@@ -247,6 +259,11 @@ namespace FinalProject
                 
             }
            
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
         }
 
 

@@ -64,8 +64,8 @@ namespace FinalProject
 
 
 
-            bank = new Bank(uiHelper, cancelTokenSource.Token, numberTellers, numberCustomers, bankVaultAmount, maxTransactionAmount, customersGoal);
-            //uiHelper.AddListBoxItems("Adding messages", new[] {"Text test1", "Text test2" });
+            bank = new Bank(uiHelper, cancelTokenSource.Token, numberTellers, numberCustomers, bankVaultAmount, maxTransactionAmount, customersGoal, initCustomersAmount);
+            
             uiHelper.AddListBoxItem("BankSimulator.Simulate Started...");
            
                 transactionGenerator = new TransactionGenerator(uiHelper, cancelTokenSource.Token, bank.BankQueue(), bank.Customers(), maxTransactionAmount, timeOutThrottle, bank.Tellers(), bank);

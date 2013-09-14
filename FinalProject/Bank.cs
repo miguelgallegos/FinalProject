@@ -22,7 +22,7 @@ namespace FinalProject
         private int numberTellers;
         private decimal maxTransactionAmount;
         private decimal customerGoal;
-
+        private decimal customersInitAmount;
         public decimal CustomerGoal
         {
             get
@@ -34,7 +34,7 @@ namespace FinalProject
         }
 
 
-        public Bank(UIHelper uiHelper, CancellationToken ct, int numberTellers, int numberCustomers, decimal bankVaultAmount, decimal maxTransactionAmount, decimal customersGoal)
+        public Bank(UIHelper uiHelper, CancellationToken ct, int numberTellers, int numberCustomers, decimal bankVaultAmount, decimal maxTransactionAmount, decimal customersGoal, decimal customersInitAmount)
         {
             this.uiHelper = uiHelper;
             this.cancelToken = ct;
@@ -45,6 +45,7 @@ namespace FinalProject
             this.bankVaultAmount = bankVaultAmount;
             this.maxTransactionAmount = maxTransactionAmount;
             this.customerGoal = customersGoal;
+            this.customersInitAmount = customersInitAmount;
 
             tellers = new List<Teller>();
             bankQueue = new BankQueue(cancelToken);
@@ -84,7 +85,8 @@ namespace FinalProject
             {
                 Random rand = new Random();
                 uiHelper.AddListBoxItem(string.Format(" +Bank.InitBank adding customer {0}", i));
-                custList.SetCustomer(new Customer("customer " + i.ToString(), (decimal)rand.Next(1, 20)));
+                //custList.SetCustomer(new Customer("customer " + i.ToString(), (decimal)rand.Next(1, 20)));
+                custList.SetCustomer(new Customer("customer " + i.ToString(), customersInitAmount));
             }
 
        

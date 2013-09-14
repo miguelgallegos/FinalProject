@@ -61,7 +61,10 @@ namespace FinalProject
 
         public decimal Balance()
         {
-            return bankBalance;
+            lock (vaultLock)
+            {
+                return bankBalance;
+            }
         }
 
     }

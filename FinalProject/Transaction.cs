@@ -11,7 +11,6 @@ namespace FinalProject
 
         private Customer customer;
         private decimal amount;
-        //private int TransactionType;
         TransactionGenerator.TransactionType transactionType;
         TransactionGenerator transGen;
 

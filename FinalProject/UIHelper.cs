@@ -21,14 +21,14 @@ namespace FinalProject
 
         public void AddBankOutOfFundsCustomerTransaction(Transaction transaction, Teller teller)
         {
-            form.AddListBoxItem(string.Format("  <<<<<{0} of ${1} for {2}, assisted by {3} failed because the BANK OUT OF MONEY", transaction.Type() == TransactionGenerator.TransactionType.Deposit ? "Deposit" : "Withdrawal",
+            form.AddListBoxItem(string.Format("  -<<<<<{0} of ${1} for {2}, assisted by {3} failed because the BANK OUT OF MONEY", transaction.Type() == TransactionGenerator.TransactionType.Deposit ? "Deposit" : "Withdrawal",
                transaction.Amount(), transaction.Customer().Name, teller));
            form.Invoke(form.Enable);
         }
 
         public void AddCustomerOutOfFundsCustomerTransaction(Transaction transaction,Teller teller)
         {
-            form.AddListBoxItem(string.Format("  <<<{0} of ${1} for {2}, assisted by {3} failed because the CUSTOMER BALANCE of ${4} is LOWER than the withdrawal amount", transaction.Type() == TransactionGenerator.TransactionType.Deposit ? "Deposit" : "Withdrawal",
+            form.AddListBoxItem(string.Format("  -<<<{0} of ${1} for {2}, assisted by {3} failed because the CUSTOMER BALANCE of ${4} is LOWER than the withdrawal amount", transaction.Type() == TransactionGenerator.TransactionType.Deposit ? "Deposit" : "Withdrawal",
                 transaction.Amount(), transaction.Customer().Name, teller, transaction.Customer().Balance));
            
         }
@@ -38,7 +38,7 @@ namespace FinalProject
             string type = transaction.Type() == TransactionGenerator.TransactionType.Deposit ? "Deposit" : "Withdrawal";
 
             form.AddListBoxItem(string.Format("  {6}{0} of {1} from {2}, assisted by {3}, balance ${4},       [Bank Balance: ${5}]", type,
-                transaction.Amount(), transaction.Customer().Name, teller, transaction.Customer().Balance, bankBalance, type == "Deposit"?">>>" : "<<<" ));
+                transaction.Amount(), transaction.Customer().Name, teller, transaction.Customer().Balance, bankBalance, type == "Deposit"?"+>>>" : "-<<<" ));
         }
 
         public void AddListBoxItem(string message) {
@@ -66,7 +66,7 @@ namespace FinalProject
 
         public void AddGoalReachedCustomerTransaction(Transaction transaction, Teller teller)
         {
-            form.AddListBoxItem(string.Format("  >>>>>{0} of ${1} for {2}, assisted by {3} resulted in Customer Goal Reached", transaction.Type() == TransactionGenerator.TransactionType.Deposit ? "Deposit" : "Withdrawal",
+            form.AddListBoxItem(string.Format("  +>>>>>{0} of ${1} for {2}, assisted by {3} resulted in Customer Goal Reached", transaction.Type() == TransactionGenerator.TransactionType.Deposit ? "Deposit" : "Withdrawal",
                           transaction.Amount(), transaction.Customer().Name, teller));
            form.Invoke(form.Enable);
 

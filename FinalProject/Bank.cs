@@ -85,7 +85,7 @@ namespace FinalProject
             {
                 Random rand = new Random();
                 uiHelper.AddListBoxItem(string.Format(" +Bank.InitBank adding customer {0}", i));
-                //custList.SetCustomer(new Customer("customer " + i.ToString(), (decimal)rand.Next(1, 20)));
+                
                 custList.SetCustomer(new Customer("customer " + i.ToString(), customersInitAmount));
             }
 

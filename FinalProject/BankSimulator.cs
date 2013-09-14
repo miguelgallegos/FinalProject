@@ -68,7 +68,7 @@ namespace FinalProject
             
             uiHelper.AddListBoxItem("BankSimulator.Simulate Started...");
            
-                transactionGenerator = new TransactionGenerator(uiHelper, cancelTokenSource.Token, bank.BankQueue(), bank.Customers(), maxTransactionAmount, timeOutThrottle, bank.Tellers(), bank);
+            transactionGenerator = new TransactionGenerator(uiHelper, cancelTokenSource.Token, bank.BankQueue(), bank.Customers(), maxTransactionAmount, timeOutThrottle, bank.Tellers(), bank);
             
         
          

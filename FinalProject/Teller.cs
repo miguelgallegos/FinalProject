@@ -10,11 +10,9 @@ namespace FinalProject
 {
     class Teller
     {
-        //shared data
         Bank bank;
         CancellationToken cancelToken;
         UIHelper uiHelper;
-        BankVault bankVault;
         private Task tellerTask;
         decimal bankBalance;
 
@@ -38,14 +36,6 @@ namespace FinalProject
             return tellerTask.Status;
         }
 
-        public void ProcessTransaction(Transaction transaction, TransactionGenerator tranGen) {
-
-            //TODO
-            //Process the transaction.
-
-       
-            
-        }
         public void ProcessTransaction(Transaction transaction)
         {
             Customer aCustomer = transaction.Customer();
@@ -102,11 +92,6 @@ namespace FinalProject
 
             bank.Customers().MakeCustomerAvailable(aCustomer, cancelToken);
 
-
-          
-
-            //decimal customerBalance = transaction.
-
         }
         private void DoWork()
         {
@@ -120,7 +105,6 @@ namespace FinalProject
                     Transaction transactionToProcess;
                     transactionToProcess = bank.BankQueue().Dequeue();
 
-                    // uiHelper.AddListBoxItem("    --->TELLER.DoWork. VERIFY_TRANSACTION: " + transactionToProcess);
                     if (transactionToProcess != null)
                         ProcessTransaction(transactionToProcess);
       

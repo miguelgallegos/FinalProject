@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FinalProject
 {
-    class Customer
+    [Serializable] class Customer
     {
         List<Transaction> customerHistory;
         private string name;
@@ -16,9 +16,7 @@ namespace FinalProject
         {
             get
             {
-               
                 return name;
-
             }
         }
 
@@ -30,7 +28,6 @@ namespace FinalProject
             get
             {
                 return balance;
-
             }
         }
 

@@ -8,10 +8,11 @@ using System.Windows.Forms;
 
 namespace FinalProject
 {
+    [Serializable]
     class Teller
     {
         Bank bank;
-        CancellationToken cancelToken;
+        [NonSerialized] CancellationToken cancelToken;
         UIHelper uiHelper;
         private Task tellerTask;
         decimal bankBalance;

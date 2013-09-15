@@ -8,6 +8,7 @@ using System.Threading;
 
 namespace FinalProject 
 {
+    [Serializable]
     class CustomerList
     {
         BlockingCollection<Customer> availQueue;
@@ -16,10 +17,8 @@ namespace FinalProject
 
         public CustomerList()
         {
-
             availQueue = new BlockingCollection<Customer>();
             unAvailQueue = new BlockingCollection<Customer>();
-
         }
 
 

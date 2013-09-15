@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FinalProject
 {
-    class BankVault
+    [Serializable] class BankVault
     {
 
         private decimal bankBalance;

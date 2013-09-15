@@ -5,11 +5,16 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Soap;
+using System.Runtime.Serialization;
+using System.Windows.Forms;
+
 namespace FinalProject
 {
     class TransactionGenerator
     {
-        CancellationToken cancelToken;
+        [NonSerialized] CancellationToken cancelToken;
         CustomerList customerList;
         int maxTransAmount;
         Task  task;
@@ -19,14 +24,20 @@ namespace FinalProject
         Random rand;
         public enum TransactionType { Deposit=0, Withdrawal=1 };
         BankQueue bankQueue;
-        List<Teller> tellers;
+        //List<Teller> tellers;
+        BlockingCollection<Teller> tellers;
         BlockingCollection<Teller> availTellerQueue;
         BlockingCollection<Teller> unAvailTellerQueue;
-
+        
         private Bank bank;
 
 
-       public  TransactionGenerator(UIHelper uiHelper, CancellationToken cancelToken, BankQueue bankQueue, CustomerList customerList, int maxTransAmount, int timeOutThrottle, List<Teller> tellers, Bank bank)
+        public const string SerializedFileName = "Bank.xml";
+        public FileStream stream;
+        public SoapFormatter formatter;
+
+       public  TransactionGenerator(UIHelper uiHelper, CancellationToken cancelToken, BankQueue bankQueue, CustomerList customerList, int maxTransAmount, int timeOutThrottle,
+            /*List<Teller> tellers,*/  BlockingCollection<Teller> tellers, Bank bank)
         {
             this.cancelToken = cancelToken;
             this.customerList = customerList;
@@ -95,6 +106,26 @@ namespace FinalProject
             finally{
 
                 uiHelper.AddTellerStoppedMessage(string.Format("TransactionGenerator {0} Stopped!", task.Id));
+
+
+                //Tried but was unable to serialize current state to include bank, customers, history, etc..  
+                // Worked through a bunch of "not serializable" errors,
+                //  and marked the appropriate fields/properties as [NonSerialized]; 
+                //but couldn't track them all down.
+
+                //try
+                //{
+                //    formatter = new SoapFormatter();
+                //    using (stream = new FileStream(SerializedFileName, FileMode.Create))
+                //    {
+                //        //Write values to SerializedFileName
+                //        formatter.Serialize(stream, bank);
+                //    }
+                //}
+                //catch (Exception ex)
+                //{
+                //    MessageBox.Show(string.Format("Error Serializing to {0}. Message = {1}", SerializedFileName, ex.Message));
+                //}
             }
         }
 

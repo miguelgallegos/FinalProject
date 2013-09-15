@@ -7,9 +7,10 @@ using System.Windows.Forms;
 
 namespace FinalProject
 {
-    class UIHelper
+    [Serializable] class UIHelper
     {
 
+        [NonSerialized]
         BankSimulatorForm form;
 
 

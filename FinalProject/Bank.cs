@@ -4,17 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Soap;
+using System.Runtime.Serialization;
+using System.Collections.Concurrent;
 
 namespace FinalProject
 {
-    class Bank
+    [Serializable] class Bank
     {
         private UIHelper uiHelper;
-        private CancellationToken cancelToken;
+        [NonSerialized] private CancellationToken cancelToken;
         private BankQueue bankQueue;
         private BankVault bankVault;
 
-        private List<Teller> tellers;
+        //private List<Teller> tellers;
+        private BlockingCollection<Teller> tellers;
         private CustomerList custList;
 
         private decimal bankVaultAmount;
@@ -47,7 +52,7 @@ namespace FinalProject
             this.customerGoal = customersGoal;
             this.customersInitAmount = customersInitAmount;
 
-            tellers = new List<Teller>();
+            tellers = new BlockingCollection<Teller>();  // List<Teller>();
             bankQueue = new BankQueue(cancelToken);
 
             InitBank();
@@ -63,7 +68,8 @@ namespace FinalProject
             return custList;
         }
 
-        public List<Teller> Tellers() {
+        public BlockingCollection<Teller> Tellers() {
+        //public List<Teller> Tellers() {
             return tellers;
         }
 

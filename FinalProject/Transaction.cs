@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace FinalProject
 {
-    class Transaction
+    [Serializable] class Transaction
     {
 
         private Customer customer;
         private decimal amount;
         TransactionGenerator.TransactionType transactionType;
+        [NonSerialized]
         TransactionGenerator transGen;
 
         private string transactionId;
@@ -25,6 +26,7 @@ namespace FinalProject
     
 
         }
+
 
         public TransactionGenerator TransactionGenerator
         {

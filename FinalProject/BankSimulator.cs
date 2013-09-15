@@ -10,7 +10,7 @@ namespace FinalProject
     class BankSimulator
     {
 
-        private CancellationTokenSource cancelTokenSource;
+        [NonSerialized] private CancellationTokenSource cancelTokenSource;
         private TransactionGenerator transactionGenerator;
 
         private int bankVaultAmount;

@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 
 namespace FinalProject
 {
+    [Serializable]
     class BankQueue
     {
-
+        [NonSerialized]
         private BlockingCollection<Transaction> queue;
+        [NonSerialized]
         private CancellationToken cancelToken;
 
         public BankQueue(CancellationToken ct) {

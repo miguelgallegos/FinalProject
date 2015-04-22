@@ -8,7 +8,4 @@ Also put some hours into serializing full state with customers, transactions, et
 
 Thanks!   
 
- - AJ Hull   
-   Thomas.AJ.Hull@gmail.com   
-   858-762-9000   
-
+ - AJ Hull
